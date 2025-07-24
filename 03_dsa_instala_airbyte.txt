@@ -1,3 +1,0 @@
-# Instale o Airbyte seguindo as instruções das aulas e de acordo com a documentação oficial:
-
-https://airbyte.com
