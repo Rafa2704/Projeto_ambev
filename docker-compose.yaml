@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  jupyter:
+    image: jupyter/scipy-notebook
+    container_name: jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/home/jovyan/work
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    container_name: db-fonte
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: dbadmin
+      POSTGRES_PASSWORD: dbadmin123
+      POSTGRES_DB: fonte
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
