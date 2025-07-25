@@ -101,6 +101,35 @@ projto_ambev/
 - Databricks Jobs
 
 ---
+---
+
+## 📒 Notebooks do Projeto
+
+Este repositório também inclui notebooks utilizados nas etapas do pipeline de dados:
+
+### 🔹 `Extraindo_dados_brutos.ipynb`
+📥 Executado localmente no Jupyter Notebook.  
+Responsável por extrair dados da API [Open Brewery DB](https://www.openbrewerydb.org/) e inserir os registros no banco **PostgreSQL** que está rodando em um container Docker.
+
+---
+
+### 🔹 `1_bronze_copia_dados.ipynb`
+📦 Notebook executado no **Databricks**.  
+Lê os dados do PostgreSQL e os salva no formato Delta Lake, compondo a camada **Bronze**, onde os dados são mantidos em sua forma bruta.
+
+---
+
+### 🔹 `2_silver_normalizar_dados.ipynb`
+🧹 Também executado no **Databricks**.  
+Transforma os dados brutos da Bronze, usando funções como `from_json` e `selectExpr`, para extrair e normalizar os principais campos, criando a camada **Silver**.
+
+---
+
+### 🔹 `3_gold_dados_mensurados.ipynb`
+📊 Notebook final executado no **Databricks**.  
+Agrega os dados normalizados da camada Silver em métricas e indicadores analíticos, compondo a camada **Gold**, que serve de base para dashboards e consumo analítico.
+
+---
 
 ## 👨‍💻 Autor
 
