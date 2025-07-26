@@ -161,6 +161,25 @@ Agrega os dados normalizados da camada Silver em métricas e indicadores analít
 
 ---
 
+## 🧠 Observações Técnicas - Boas Práticas com Delta Lake no Databricks
+
+Pensando em cenários de Big Data com grandes volumes de dados e múltiplas transformações, algumas boas práticas foram consideradas (ou podem ser implementadas futuramente) no uso do **Delta Lake** no Databricks:
+
+- ✅ **Particionamento de dados**: melhora a performance de leitura e escrita, especialmente em consultas filtradas por colunas temporais como `date`, `ano_mes`, `event_date`, etc.
+- 🔁 **Time Travel (`VERSION AS OF`)**: permite acessar versões anteriores da tabela, útil para auditoria, debug e rollback de transformações.
+- 🧹 **Vacuum**: remove arquivos antigos e não referenciados para economizar armazenamento e manter a performance.
+
+  ```sql
+  VACUUM nome_da_tabela RETAIN 168 HOURS;
+  ```
+
+- 📊 **Z-Ordering** (quando aplicável): otimiza a ordenação dos dados internamente, melhorando ainda mais o desempenho de queries.
+- 💾 **OPTIMIZE**: compacta pequenos arquivos e melhora o desempenho geral de leitura.
+
+Essas práticas são fundamentais para manter um **data lakehouse saudável, performático e escalável**.
+
+---
+
 ## 👨‍💻 Autor
 
 Rafael Carlos dos Santos  
