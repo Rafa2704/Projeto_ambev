@@ -1,3 +1,4 @@
+
 # 🍺 Projeto de Ingestão e Modelagem de Dados - Open Brewery DB
 
 Este projeto realiza a ingestão de dados da API pública [Open Brewery DB](https://www.openbrewerydb.org/), salvando os dados brutos em PostgreSQL e posteriormente no catálogo do Databricks, seguindo a arquitetura Medallion (camadas bronze, silver e gold). O pipeline está versionado no GitHub e executado por Jobs no Databricks.
@@ -19,11 +20,47 @@ docker compose up -d
 
 ---
 
-## 🔄 Etapa 2 – Ingestão com Python + Airbyte
+## 🔄 Etapa 2 – Ingestão com Airbyte (via Docker e `abctl`)
 
-Inicialmente, a API [Open Brewery DB](https://www.openbrewerydb.org/) foi consumida usando Python e armazenada localmente em um banco **PostgreSQL** via Docker, com os dados brutos salvos como `jsonb`.
+Para facilitar testes locais e reproduzir o pipeline de ingestão de forma prática, o **Airbyte** foi configurado de duas formas distintas:
 
-Posteriormente, utilizamos o **Airbyte** para realizar a ingestão automática dos dados do PostgreSQL para o **catálogo do Databricks** (Unity Catalog).
+### 🔹 1. Acesso à documentação oficial
+
+O Airbyte Open Source pode ser explorado em [https://airbyte.com/product/airbyte-open-source](https://airbyte.com/product/airbyte-open-source).
+
+---
+
+### 🔹 2. Execução via Docker (manual)
+
+O Airbyte também foi executado manualmente via Docker (sem uso de `docker-compose`).  
+Este modo permite rodar os containers do Airbyte diretamente com o Docker Desktop, sem acoplamento à infraestrutura principal do projeto.
+
+### 🔹 3. Execução via `abctl` (linha de comando)
+
+Seguindo a [documentação oficial](https://docs.airbyte.com/deploying-airbyte/on-your-computer/abctl), o Airbyte também foi instalado via CLI (`abctl`), permitindo uma forma prática e controlada de gerenciar instâncias locais:
+
+#### 📦 Passos principais:
+
+1. **Verificar arquitetura do sistema**  
+   Acesse: `Configurações > Sistema > Sobre` e identifique se é `AMD` ou `ARM`.
+
+2. **Download e instalação do `abctl`**  
+   Faça o download da versão correta para seu sistema operacional, extraia os arquivos e adicione a pasta ao `PATH`.
+
+3. **Instalação do Airbyte local**  
+   Com Docker Desktop aberto, rode:
+
+   ```bash
+   abctl local install
+   ```
+
+4. **Recuperar credenciais padrão** (usuário/senha para acessar o painel do Airbyte):
+
+   ```bash
+   abctl local credentials
+   ```
+
+---
 
 ### 🔧 Configuração do Airbyte:
 
@@ -101,7 +138,6 @@ projto_ambev/
 - Databricks Jobs
 
 ---
----
 
 ## 📒 Notebooks do Projeto
 
@@ -111,19 +147,13 @@ Este repositório também inclui notebooks utilizados nas etapas do pipeline de 
 📥 Executado localmente no Jupyter Notebook.  
 Responsável por extrair dados da API [Open Brewery DB](https://www.openbrewerydb.org/) e inserir os registros no banco **PostgreSQL** que está rodando em um container Docker.
 
----
-
 ### 🔹 `1_bronze_copia_dados.ipynb`
 📦 Notebook executado no **Databricks**.  
 Lê os dados do PostgreSQL e os salva no formato Delta Lake, compondo a camada **Bronze**, onde os dados são mantidos em sua forma bruta.
 
----
-
 ### 🔹 `2_silver_normalizar_dados.ipynb`
 🧹 Também executado no **Databricks**.  
 Transforma os dados brutos da Bronze, usando funções como `from_json` e `selectExpr`, para extrair e normalizar os principais campos, criando a camada **Silver**.
-
----
 
 ### 🔹 `3_gold_dados_mensurados.ipynb`
 📊 Notebook final executado no **Databricks**.  
